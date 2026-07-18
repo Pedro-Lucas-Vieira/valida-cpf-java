@@ -1,63 +1,68 @@
-
 public class Cpf {
-	 /** Realiza a validação do CPF.
-    *
-    *autor pedro lucas 
-    */
-   static public boolean CPF (String strCpf )
-   {
-      int     d1, d2;
-      int     digito1, digito2, resto;
-      int     digitoCPF;
-      String  nDigResult;
 
-      d1 = d2 = 0;
-      digito1 = digito2 = resto = 0;
+    /**
+     * Realiza a validação do CPF.
+     *
+     * autor pedro lucas
+     */
+    static public boolean CPF(String strCpf) {
 
-      for (int nCount = 1; nCount < strCpf.length() -1; nCount++)
-      {
-         digitoCPF = Integer.valueOf (strCpf.substring(nCount -1, nCount)).intValue();
+        // Remove tudo que não for dígito (pontos, traço, espaços etc.)
+        strCpf = strCpf.replaceAll("[^0-9]", "");
 
-         //multiplique a ultima casa por 2 a seguinte por 3 a seguinte por 4 e assim por diante.
-         d1 = d1 + ( 11 - nCount ) * digitoCPF;
+        // CPF precisa ter exatamente 11 dígitos
+        if (strCpf.length() != 11) {
+            return false;
+        }
 
-         //para o segundo digito repita o procedimento incluindo o primeiro digito calculado no passo anterior.
-         d2 = d2 + ( 12 - nCount ) * digitoCPF;
-      };
+        // Rejeita sequências com todos os dígitos iguais (111.111.111-11, etc.)
+        if (strCpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
 
-      //Primeiro resto da divisão por 11.
-      resto = (d1 % 11);
+        int d1 = 0, d2 = 0;
+        int digito1, digito2, resto;
+        int digitoCPF;
 
-      //Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11 menos o resultado anterior.
-      if (resto < 2)
-         digito1 = 0;
-      else
-         digito1 = 11 - resto;
+        for (int nCount = 1; nCount < strCpf.length() - 1; nCount++) {
+            digitoCPF = Integer.parseInt(strCpf.substring(nCount - 1, nCount));
 
-      d2 += 2 * digito1;
+            // multiplica a primeira casa por 10, a seguinte por 9, e assim por diante
+            d1 = d1 + (11 - nCount) * digitoCPF;
 
-      //Segundo resto da divisão por 11.
-      resto = (d2 % 11);
+            // para o segundo dígito repete o procedimento incluindo o primeiro dígito calculado
+            d2 = d2 + (12 - nCount) * digitoCPF;
+        }
 
-      //Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11 menos o resultado anterior.
-      if (resto < 2)
-         digito2 = 0;
-      else
-         digito2 = 11 - resto;
+        // Primeiro resto da divisão por 11
+        resto = d1 % 11;
+        digito1 = (resto < 2) ? 0 : 11 - resto;
 
-      //Digito verificador do CPF que está sendo validado.
-      String nDigVerific = strCpf.substring (strCpf.length()-2, strCpf.length());
+        d2 += 2 * digito1;
 
-      //Concatenando o primeiro resto com o segundo.
-      nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
+        // Segundo resto da divisão por 11
+        resto = d2 % 11;
+        digito2 = (resto < 2) ? 0 : 11 - resto;
 
-      //comparar o digito verificador do cpf com o primeiro resto + o segundo resto.
-      return nDigVerific.equals(nDigResult);
-   }
+        // Dígito verificador informado no CPF
+        String nDigVerific = strCpf.substring(strCpf.length() - 2, strCpf.length());
 
-   /*ESSE COMANDO PARA TESTAR É SO COLOCAR O NUMERO DE CPF DENTRO PARENTESE ENTRE AS VIRGULAS  NA ULTIMA LINHA EXE: ( CPF("1111111")) */
-   public static void main(String[] args) {
-      System.out.println( CPF("") );
+        // Dígitos calculados
+        String nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
+
+        return nDigVerific.equals(nDigResult);
+    }
+
+    public static void main(String[] args) {
+        // CPFs de teste
+        System.out.println(CPF("111.444.777-35")); // true (CPF válido conhecido)
+        System.out.println(CPF("11144477735"));     // true
+        System.out.println(CPF("111.111.111-11"));  // false (sequência repetida)
+        System.out.println(CPF("123.456.789-00"));  // false (dígito inválido)
+        System.out.println(CPF(""));                 // false (tamanho inválido)
+        System.out.println(CPF("123"));              // false (tamanho inválido)
+    }
+}
    }
    
 
