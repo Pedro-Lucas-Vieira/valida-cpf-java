@@ -1,3 +1,7 @@
+# valida-cpf-java
+Este é um programa simples e eficiente desenvolvido em Java para realizar a validação de números de CPF (Cadastro de Pessoas Físicas). O sistema analisa a estrutura do número digitado e aplica o algoritmo oficial da Receita Federal para validar os dígitos verificadores.
+
+---
 
 ## 🚀 Funcionalidades
 
