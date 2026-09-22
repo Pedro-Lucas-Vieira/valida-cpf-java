@@ -11,4 +11,7 @@ Este é um programa simples e eficiente desenvolvido em Java para realizar a val
 
 ---
 
+## 🛠️ Tecnologias Utilizadas
 
+* **Linguagem:** Java (JDK 17 ou superior)
+* **Paradigma:** Orientação a Objetos / Funcional
